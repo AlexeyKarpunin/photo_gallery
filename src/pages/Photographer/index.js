@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react"
-import { useHistory, useParams } from "react-router";
 import api from '../../api/api';
 import albumManager from '../../hooks/albumManager';
+import { useEffect, useState } from "react"
+import { useHistory, useParams } from "react-router";
 
 export default function Photographer () {
     const [userAlbums, setUserAlbums] = useState([]);
