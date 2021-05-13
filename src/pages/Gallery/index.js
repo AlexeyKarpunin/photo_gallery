@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router";
 import api from "../../api/api";
 import usePopup from "../../hooks/usePopup";
+import albumManager from '../../hooks/albumManager';
 
 export default function Gallery () {
     const [photos, setPhotos] = useState([]);
@@ -9,6 +10,12 @@ export default function Gallery () {
     const popup = usePopup();
 
     useEffect (() => {
+        const thisAlbum = albumManager.getAlbum(galleryId)
+        if (thisAlbum) {
+            popup.initPopupPhotos(thisAlbum);
+            return setPhotos(thisAlbum);
+        }
+
         api.getAlbumPhotos(galleryId)
            .then( (res) => res.json())
            .then( (json) => {

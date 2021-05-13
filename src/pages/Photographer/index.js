@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useHistory, useParams } from "react-router";
 import api from '../../api/api';
+import albumManager from '../../hooks/albumManager';
 
 export default function Photographer () {
     const [userAlbums, setUserAlbums] = useState([]);
@@ -14,7 +15,6 @@ export default function Photographer () {
     }, []);
 
   
-
     return (
        <section>
            <h1 style={{padding: "50px 0 0 0"}}>{name}</h1>
@@ -38,9 +38,14 @@ function Album (props) {
     const history = useHistory();
 
     useEffect (() => {
+        const thisAlbum = albumManager.getAlbum(props.id)
+        if (thisAlbum) return setAlbumPhotos(thisAlbum);
         api.getAlbumPhotos(props.id)
            .then( (res) => res.json())
-           .then( (json) => setAlbumPhotos(json))
+           .then( (json) => {
+               setAlbumPhotos(json);
+               albumManager.setAlbum(props.id, json);
+           })
            .catch( (error) => {throw new Error(error)});
     }, []);
 
